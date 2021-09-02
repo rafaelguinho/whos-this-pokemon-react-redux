@@ -37,5 +37,5 @@ export const getPokemonsRange = (level: number): RangePokemons => {
   return result;
 };
 
-export const getPokemonIndex = (init: number, end: number): number =>
+export const getRandonPokemonIndex = (init: number, end: number): number =>
   Math.floor(Math.random() * (end - init + 1)) + init;
