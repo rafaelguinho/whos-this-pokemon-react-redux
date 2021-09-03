@@ -1,8 +1,8 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import MainMenu from "./components/MainMenu";
 import { useAppSelector } from "./app/hooks";
+import PokemonGame from "./components/PokemonGame";
 
 function App() {
   const { level, init, end } = useAppSelector((state) => state.game.levelConfigurations);
@@ -23,7 +23,7 @@ function App() {
           Learn React
         </a>
 
-        <MainMenu />
+        <PokemonGame />
       </header>
     </div>
   );

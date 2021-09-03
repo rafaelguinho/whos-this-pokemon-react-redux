@@ -3,12 +3,12 @@ import { ImageDrawnData } from "./types";
 export class ImageDesigner {
   constructor(private _imageUrl: string, private _canvas: HTMLCanvasElement) {}
 
-  drawImage(): void {
-    const imageDrawnData: ImageDrawnData = this.drawImageAndReturnData(
+  async drawImage(): Promise<void> {
+    const imageDrawnData: ImageDrawnData = await this.drawImageAndReturnData(
       this._imageUrl,
       this._canvas
     );
-
+    console.log("here");
     imageDrawnData.context?.drawImage(
       imageDrawnData.image,
       0,
@@ -18,8 +18,8 @@ export class ImageDesigner {
     );
   }
 
-  drawSilhouette(): void {
-    const imageDrawnData: ImageDrawnData = this.drawImageAndReturnData(
+  async drawSilhouette(): Promise<void> {
+    const imageDrawnData: ImageDrawnData = await this.drawImageAndReturnData(
       this._imageUrl,
       this._canvas
     );
@@ -55,12 +55,12 @@ export class ImageDesigner {
     imageDrawnData.context?.putImageData(rawImage, 0, 0);
   }
 
-  private drawImageAndReturnData(
+  private async drawImageAndReturnData(
     _imageUrl: string,
     _canvas: HTMLCanvasElement
-  ): ImageDrawnData {
-    const image = new Image();
-    image.src = this._imageUrl;
+  ): Promise<ImageDrawnData> {
+
+    const image: HTMLImageElement = await loadImage(this._imageUrl);
 
     const context: CanvasRenderingContext2D | null =
       this._canvas.getContext("2d");
@@ -80,3 +80,14 @@ export class ImageDesigner {
     return result;
   }
 }
+
+const loadImage = (url: string): Promise<HTMLImageElement> => {
+  return new Promise<HTMLImageElement>((resolve) => {
+    const image = new Image();
+    image.addEventListener("load", () => {
+      resolve(image);
+    });
+    image.src = url;
+    return image;
+  });
+};
