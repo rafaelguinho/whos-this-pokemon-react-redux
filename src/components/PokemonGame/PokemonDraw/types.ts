@@ -1,4 +1,4 @@
 export interface PokemonDrawProps {
-  selectedPokemonId: number;
+  selectedPokemonId: number | null;
   drawSilhouette: boolean;
 }

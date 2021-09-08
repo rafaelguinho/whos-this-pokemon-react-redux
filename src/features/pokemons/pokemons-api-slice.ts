@@ -22,8 +22,13 @@ export const apiSlice = createApi({
           return `/pokemon?limit=${limit}`;
         },
       }),
+      getPokemon: builder.query<Pokemon, number>({
+        query(id) {
+          return `/pokemon/${id}`;
+        },
+      }),
     };
   },
 });
 
-export const { useFetchPokemonsQuery } = apiSlice;
+export const { useFetchPokemonsQuery, useGetPokemonQuery } = apiSlice;

@@ -6,11 +6,10 @@ const PokemonDraw: React.FC<PokemonDrawProps> = ({
   selectedPokemonId,
   drawSilhouette,
 }: PokemonDrawProps) => {
-  const imageBaseUrl =
-    "assets/img/pokemons";
+  const imageBaseUrl = "assets/img/pokemons";
 
   useEffect(() => {
-      
+    if (!selectedPokemonId) return;
     const imageUrl = `${imageBaseUrl}/${String(selectedPokemonId)}.png`;
 
     const canvas: HTMLCanvasElement = document.getElementById(
@@ -25,6 +24,8 @@ const PokemonDraw: React.FC<PokemonDrawProps> = ({
       imageDesigner.drawImage();
     }
   }, [selectedPokemonId, drawSilhouette]);
+
+  if (!selectedPokemonId) return <></>;
 
   return (
     <>
