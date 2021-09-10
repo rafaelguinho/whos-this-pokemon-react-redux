@@ -8,6 +8,8 @@ import { useFetchPokemonsNamesQuery } from "../../features/pokemons/pokemons-nam
 import useCountDownTimer from "../../hooks/countDown";
 import { capitalize, shuffle } from "../../util/util";
 import PokemonDraw from "./PokemonDraw";
+import PokemonOptions from "./PokemonOptions";
+import { PokemonOption } from "./types";
 
 const PokemonGame: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +20,10 @@ const PokemonGame: React.FC = () => {
   const [sortedPokemonIndex, setSortedPokemonIndex] = useState<number | null>(
     null
   );
+
+  const [pokemonsOptions, setPokemonsOptions] = useState<
+    PokemonOption[] | null
+  >(null);
 
   const { timeLeft, timesUp } = useCountDownTimer(8);
 
@@ -44,9 +50,12 @@ const PokemonGame: React.FC = () => {
 
           const pokemon = result.payload as Pokemon;
 
-          const allNames: string[] = allPokemonsNames?.map((x) => x.name) ?? [];
+          const options: PokemonOption[] = createOptions(
+            pokemon,
+            allPokemonsNames
+          );
 
-          const options: string[] = createOptions(pokemon, allNames);
+          setPokemonsOptions(options);
 
           console.log(pokemon.name, options);
         })
@@ -56,18 +65,27 @@ const PokemonGame: React.FC = () => {
     }
   }, [shouldSelectNewProkemon, allPokemonsNames, dispatch, init, end]);
 
-  const createOptions = (pokemon: Pokemon, allNames: string[]): string[] => {
-    const index1: number = getRandonPokemonIndex(0, allNames.length);
-    let index2: number = getRandonPokemonIndex(0, allNames.length);
+  const createOptions = (
+    pokemon: Pokemon,
+    allPokemonsNames: Pokemon[]
+  ): PokemonOption[] => {
+    const index1: number = getRandonPokemonIndex(0, allPokemonsNames.length);
+    let index2: number = getRandonPokemonIndex(0, allPokemonsNames.length);
 
     while (index1 === index2) {
-      index2 = getRandonPokemonIndex(0, allNames.length);
+      index2 = getRandonPokemonIndex(0, allPokemonsNames.length);
     }
 
-    let options: string[] = [
-      capitalize(allNames[index1]),
-      capitalize(allNames[index2]),
-      capitalize(pokemon.name),
+    let options: PokemonOption[] = [
+      {
+        id: allPokemonsNames[index1].id,
+        name: capitalize(allPokemonsNames[index1].name),
+      },
+      {
+        id: allPokemonsNames[index2].id,
+        name: capitalize(allPokemonsNames[index2].name),
+      },
+      { id: pokemon.id, name: capitalize(pokemon.name) },
     ];
 
     return shuffle(options);
@@ -81,6 +99,8 @@ const PokemonGame: React.FC = () => {
         selectedPokemonId={sortedPokemonIndex}
         drawSilhouette={true}
       />
+
+      <PokemonOptions options={pokemonsOptions} isActive={!timesUp} />
       <button onClick={(e) => setShouldSelectNewProkemon(true)}>New</button>
     </>
   );
