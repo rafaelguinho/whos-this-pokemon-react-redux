@@ -3,6 +3,11 @@ import React, { useEffect, useState } from "react";
 import { fetchPokemonById } from "../../actions/api-actions";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getRandonPokemonIndex } from "../../configurations/level-generations-config";
+import {
+  addPoint,
+  lostALife,
+  setCurrentPokemon,
+} from "../../features/game/game-slice";
 import { Pokemon } from "../../features/game/types";
 import { useFetchPokemonsNamesQuery } from "../../features/pokemons/pokemons-names-slice";
 import useCountDownTimer from "../../hooks/countDown";
@@ -25,13 +30,21 @@ const PokemonGame: React.FC = () => {
     PokemonOption[] | null
   >(null);
 
-  const { timeLeft, timesUp } = useCountDownTimer(8);
+  const { timeLeft, timesUp, restartCountDown } = useCountDownTimer(8);
 
   const { data: allPokemonsNames } = useFetchPokemonsNamesQuery();
 
   const { init, end } = useAppSelector(
     (state) => state.game.levelConfigurations
   );
+
+  const currentPokemon = useAppSelector((state) => state.game.currentPokemon);
+
+  useEffect(() => {
+    if (shouldSelectNewProkemon) {
+      restartCountDown();
+    }
+  }, [shouldSelectNewProkemon, restartCountDown]);
 
   useEffect(() => {
     if (shouldSelectNewProkemon && allPokemonsNames) {
@@ -56,8 +69,7 @@ const PokemonGame: React.FC = () => {
           );
 
           setPokemonsOptions(options);
-
-          console.log(pokemon.name, options);
+          dispatch(setCurrentPokemon(pokemon));
         })
         .catch((error) => {
           console.error(error);
@@ -91,6 +103,16 @@ const PokemonGame: React.FC = () => {
     return shuffle(options);
   };
 
+  const checkAnswer = (selectedOption: PokemonOption): void => {
+    if (selectedOption.id === currentPokemon?.id) {
+      console.log("right answer");
+      dispatch(addPoint());
+    } else {
+      console.log("wrong answer");
+      dispatch(lostALife());
+    }
+  };
+
   return (
     <>
       <p>{timesUp ? "acabou" : "ainda tem"}</p>
@@ -100,7 +122,11 @@ const PokemonGame: React.FC = () => {
         drawSilhouette={true}
       />
 
-      <PokemonOptions options={pokemonsOptions} isActive={!timesUp} />
+      <PokemonOptions
+        options={pokemonsOptions}
+        isActive={!timesUp}
+        optionsClickAction={checkAnswer}
+      />
       <button onClick={(e) => setShouldSelectNewProkemon(true)}>New</button>
     </>
   );

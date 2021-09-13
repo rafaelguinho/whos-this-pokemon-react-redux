@@ -24,7 +24,12 @@ const useCountDownTimer = (seconds: number) => {
     // when we update it
   }, [timeLeft]);
 
-  return { timeLeft, timesUp };
+  const restartCountDown = (): void => {
+    setTimesUp(false);
+    setTimeLeft(seconds);
+  };
+
+  return { timeLeft, timesUp, restartCountDown };
 };
 
 export default useCountDownTimer;

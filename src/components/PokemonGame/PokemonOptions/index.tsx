@@ -3,13 +3,19 @@ import { PokemonOptionsProps } from "./types";
 
 const PokemonOptions: React.FC<PokemonOptionsProps> = ({
   options,
+  isActive,
+  optionsClickAction,
 }: PokemonOptionsProps) => {
   if (!options) return <></>;
 
   return (
     <ul>
       {options.map((o) => (
-        <li>{o.name}</li>
+        <li
+          onClick={(e) => (isActive ? optionsClickAction(o) : function () {})}
+        >
+          {o.name}
+        </li>
       ))}
     </ul>
   );
