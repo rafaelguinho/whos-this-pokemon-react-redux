@@ -1,5 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import { fetchPokemonById } from "../../actions/api-actions";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getRandonPokemonIndex } from "../../configurations/level-generations-config";
@@ -11,13 +11,20 @@ import {
 import { Pokemon } from "../../features/game/types";
 import { useFetchPokemonsNamesQuery } from "../../features/pokemons/pokemons-names-slice";
 import useCountDownTimer from "../../hooks/countDown";
+import reducer, {
+  PokemonGameActionKind,
+} from "../../reducers/pokemonGameReducer";
+import initialState from "../../reducers/pokemonGameReducerInitialState";
+import { PokemonGameReducerState } from "../../reducers/types";
 import { capitalize, shuffle } from "../../util/util";
 import PokemonDraw from "./PokemonDraw";
 import PokemonOptions from "./PokemonOptions";
 import { PokemonOption } from "./types";
 
 const PokemonGame: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const [state, reducerDispatch] = useReducer(reducer, initialState);
+
+  const reduxDispacher = useAppDispatch();
 
   const [shouldSelectNewProkemon, setShouldSelectNewProkemon] =
     useState<boolean>(true);
@@ -53,7 +60,7 @@ const PokemonGame: React.FC = () => {
       setSortedPokemonIndex(sortedPokemonIndex);
       setShouldSelectNewProkemon(false);
 
-      const promise: Promise<PayloadAction<any, string>> = dispatch(
+      const promise: Promise<PayloadAction<any, string>> = reduxDispacher(
         fetchPokemonById(sortedPokemonIndex)
       );
 
@@ -68,14 +75,19 @@ const PokemonGame: React.FC = () => {
             allPokemonsNames
           );
 
-          setPokemonsOptions(options);
-          dispatch(setCurrentPokemon(pokemon));
+          reducerDispatch({
+            type: PokemonGameActionKind.SET_OPTIONS_AND_CURRENT_POKEMON,
+            payload: {
+              currentOptions: options,
+              currentPokemon: pokemon,
+            } as PokemonGameReducerState,
+          });
         })
         .catch((error) => {
           console.error(error);
         });
     }
-  }, [shouldSelectNewProkemon, allPokemonsNames, dispatch, init, end]);
+  }, [shouldSelectNewProkemon, allPokemonsNames, reducerDispatch, init, end]);
 
   const createOptions = (
     pokemon: Pokemon,
@@ -106,10 +118,28 @@ const PokemonGame: React.FC = () => {
   const checkAnswer = (selectedOption: PokemonOption): void => {
     if (selectedOption.id === currentPokemon?.id) {
       console.log("right answer");
-      dispatch(addPoint());
+
+      reducerDispatch({
+        type: PokemonGameActionKind.SET_ANSWER,
+        payload: {
+          isRightAnswer: true,
+          currentPokemon: selectedOption,
+        } as PokemonGameReducerState,
+      });
+
+      reduxDispacher(addPoint());
     } else {
       console.log("wrong answer");
-      dispatch(lostALife());
+
+      reducerDispatch({
+        type: PokemonGameActionKind.SET_ANSWER,
+        payload: {
+          isRightAnswer: false,
+          currentPokemon: selectedOption,
+        } as PokemonGameReducerState,
+      });
+
+      reduxDispacher(lostALife());
     }
   };
 
