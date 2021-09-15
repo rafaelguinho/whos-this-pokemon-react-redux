@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getPokemonsRange } from "../../configurations/level-generations-config";
 import { RangePokemons } from "../../configurations/types";
-import { Pokemon } from "./types";
 
 interface LevelConfigurations {
   level: number;
@@ -11,7 +10,6 @@ interface LevelConfigurations {
 
 interface GameState {
   lifes: number;
-  currentPokemon: Pokemon | null;
   timeIsOver: boolean;
   gameIsOver: boolean;
   levelConfigurations: LevelConfigurations;
@@ -20,7 +18,6 @@ interface GameState {
 
 const initialState: GameState = {
   lifes: 3,
-  currentPokemon: null,
   timeIsOver: false,
   gameIsOver: false,
   levelConfigurations: {
@@ -46,9 +43,6 @@ const gameSlice = createSlice({
       if (state.lifes === 0) {
         state.gameIsOver = true;
       }
-    },
-    setCurrentPokemon(state, action: PayloadAction<Pokemon>) {
-      state.currentPokemon = action.payload;
     },
     indicateTimeIsOver(state) {
       state.timeIsOver = true;
@@ -82,7 +76,6 @@ const gameSlice = createSlice({
 export const {
   startNewGame,
   lostALife,
-  setCurrentPokemon,
   indicateTimeIsOver,
   indicateStartTimer,
   setLevel,

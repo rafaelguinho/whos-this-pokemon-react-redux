@@ -7,4 +7,6 @@ export interface PokemonGameReducerState {
   pokemonAnswer: Pokemon | null;
   isRightAnswer: boolean | null;
   endQuiz: boolean;
+  selectNewProkemon: boolean;
+  canSelectNextProkemon: boolean;
 }

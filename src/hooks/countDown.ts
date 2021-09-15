@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 const useCountDownTimer = (seconds: number) => {
   // initialize timeLeft with the seconds prop
   const [timeLeft, setTimeLeft] = useState<number>(seconds);
-  const [timesUp, setTimesUp] = useState<boolean>(false);
+  const [timesUp, setTimesUp] = useState<boolean>(true);
+
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
+  const [stoped, setStoped] = useState<boolean>(false);
 
   useEffect(() => {
     // exit early when we reach 0
@@ -15,8 +19,14 @@ const useCountDownTimer = (seconds: number) => {
     // save intervalId to clear the interval when the
     // component re-renders
     const intervalId = setInterval(() => {
-      setTimeLeft(timeLeft - 1);
+      if (!stoped) {
+        setTimeLeft(timeLeft - 1);
+      } else {
+        clearInterval(intervalId);
+      }
     }, 1000);
+
+    setIntervalId(intervalId);
 
     // clear interval on re-render to avoid memory leaks
     return () => clearInterval(intervalId);
@@ -24,12 +34,20 @@ const useCountDownTimer = (seconds: number) => {
     // when we update it
   }, [timeLeft]);
 
-  const restartCountDown = (): void => {
+  const startRestartCountDown = (): void => {
+    setStoped(false);
     setTimesUp(false);
     setTimeLeft(seconds);
   };
 
-  return { timeLeft, timesUp, restartCountDown };
+  const stopCountDown = (): void => {
+    setStoped(true);
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+  };
+
+  return { timeLeft, timesUp, startRestartCountDown, stopCountDown };
 };
 
 export default useCountDownTimer;

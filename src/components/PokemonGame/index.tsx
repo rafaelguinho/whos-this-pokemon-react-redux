@@ -1,13 +1,9 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { fetchPokemonById } from "../../actions/api-actions";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getRandonPokemonIndex } from "../../configurations/level-generations-config";
-import {
-  addPoint,
-  lostALife,
-  setCurrentPokemon,
-} from "../../features/game/game-slice";
+import { addPoint, lostALife } from "../../features/game/game-slice";
 import { Pokemon } from "../../features/game/types";
 import { useFetchPokemonsNamesQuery } from "../../features/pokemons/pokemons-names-slice";
 import useCountDownTimer from "../../hooks/countDown";
@@ -26,18 +22,8 @@ const PokemonGame: React.FC = () => {
 
   const reduxDispacher = useAppDispatch();
 
-  const [shouldSelectNewProkemon, setShouldSelectNewProkemon] =
-    useState<boolean>(true);
-
-  const [sortedPokemonIndex, setSortedPokemonIndex] = useState<number | null>(
-    null
-  );
-
-  const [pokemonsOptions, setPokemonsOptions] = useState<
-    PokemonOption[] | null
-  >(null);
-
-  const { timeLeft, timesUp, restartCountDown } = useCountDownTimer(8);
+  const { timeLeft, timesUp, stopCountDown, startRestartCountDown } =
+    useCountDownTimer(8);
 
   const { data: allPokemonsNames } = useFetchPokemonsNamesQuery();
 
@@ -45,20 +31,45 @@ const PokemonGame: React.FC = () => {
     (state) => state.game.levelConfigurations
   );
 
-  const currentPokemon = useAppSelector((state) => state.game.currentPokemon);
+  const gameIsOver = useAppSelector((state) => state.game.gameIsOver);
+  const score = useAppSelector((state) => state.game.score);
+  const lifes = useAppSelector((state) => state.game.lifes);
+
+  const isRightAnswer = state.isRightAnswer;
+
+  const selectNewProkemon = state.selectNewProkemon && !gameIsOver;
+
+  const canSelectNextProkemon = state.canSelectNextProkemon && !gameIsOver;
 
   useEffect(() => {
-    if (shouldSelectNewProkemon) {
-      restartCountDown();
+    if (timesUp) {
+      reducerDispatch({
+        type: PokemonGameActionKind.END_QUIZ,
+        payload: null,
+      });
     }
-  }, [shouldSelectNewProkemon, restartCountDown]);
+  }, [timesUp]);
 
   useEffect(() => {
-    if (shouldSelectNewProkemon && allPokemonsNames) {
-      const sortedPokemonIndex: number = getRandonPokemonIndex(init, end);
+    if (timesUp && !isRightAnswer) {
+      reduxDispacher(lostALife());
+    }
+  }, [timesUp, isRightAnswer]);
 
-      setSortedPokemonIndex(sortedPokemonIndex);
-      setShouldSelectNewProkemon(false);
+  useEffect(() => {
+    if (selectNewProkemon) {
+      startRestartCountDown();
+    }
+  }, [selectNewProkemon, startRestartCountDown]);
+
+  useEffect(() => {
+    if (selectNewProkemon && allPokemonsNames) {
+      reducerDispatch({
+        type: PokemonGameActionKind.NOT_SELECT_NEW_POKEMON,
+        payload: null,
+      });
+
+      const sortedPokemonIndex: number = getRandonPokemonIndex(init, end);
 
       const promise: Promise<PayloadAction<any, string>> = reduxDispacher(
         fetchPokemonById(sortedPokemonIndex)
@@ -87,7 +98,14 @@ const PokemonGame: React.FC = () => {
           console.error(error);
         });
     }
-  }, [shouldSelectNewProkemon, allPokemonsNames, reducerDispatch, init, end]);
+  }, [
+    selectNewProkemon,
+    allPokemonsNames,
+    reducerDispatch,
+    reduxDispacher,
+    init,
+    end,
+  ]);
 
   const createOptions = (
     pokemon: Pokemon,
@@ -116,48 +134,62 @@ const PokemonGame: React.FC = () => {
   };
 
   const checkAnswer = (selectedOption: PokemonOption): void => {
-    if (selectedOption.id === currentPokemon?.id) {
+    stopCountDown();
+
+    let isRightAnswer: boolean = false;
+    if (selectedOption.id === state.currentPokemon?.id) {
       console.log("right answer");
 
-      reducerDispatch({
-        type: PokemonGameActionKind.SET_ANSWER,
-        payload: {
-          isRightAnswer: true,
-          currentPokemon: selectedOption,
-        } as PokemonGameReducerState,
-      });
+      isRightAnswer = true;
 
       reduxDispacher(addPoint());
     } else {
       console.log("wrong answer");
 
-      reducerDispatch({
-        type: PokemonGameActionKind.SET_ANSWER,
-        payload: {
-          isRightAnswer: false,
-          currentPokemon: selectedOption,
-        } as PokemonGameReducerState,
-      });
+      isRightAnswer = false;
 
       reduxDispacher(lostALife());
     }
+
+    reducerDispatch({
+      type: PokemonGameActionKind.SET_ANSWER,
+      payload: {
+        isRightAnswer,
+        currentPokemon: selectedOption,
+      } as PokemonGameReducerState,
+    });
   };
 
   return (
     <>
-      <p>{timesUp ? "acabou" : "ainda tem"}</p>
+      <p>
+        {score} / {lifes}
+      </p>
       <progress id="file" value={timeLeft} max="8"></progress>
       <PokemonDraw
-        selectedPokemonId={sortedPokemonIndex}
-        drawSilhouette={true}
+        selectedPokemonId={state.currentPokemon?.id}
+        drawSilhouette={!isRightAnswer}
       />
 
       <PokemonOptions
-        options={pokemonsOptions}
-        isActive={!timesUp}
+        options={state.currentOptions}
+        isActive={!state.endQuiz}
         optionsClickAction={checkAnswer}
       />
-      <button onClick={(e) => setShouldSelectNewProkemon(true)}>New</button>
+      {canSelectNextProkemon ? (
+        <button
+          onClick={(e) =>
+            reducerDispatch({
+              type: PokemonGameActionKind.SELECT_NEW_POKEMON,
+              payload: null,
+            })
+          }
+        >
+          New
+        </button>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
