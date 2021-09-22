@@ -39,3 +39,21 @@ export const getPokemonsRange = (level: number): RangePokemons => {
 
 export const getRandonPokemonIndex = (init: number, end: number): number =>
   Math.floor(Math.random() * (end - init + 1)) + init;
+
+export const getRandonPokemonIndexExcludeProposedPokemons = (
+  init: number,
+  end: number,
+  proposedPokemonsIds: Array<number>
+): number => {
+  const index = getRandonPokemonIndex(init, end);
+
+  if (proposedPokemonsIds.includes(index)) {
+    return getRandonPokemonIndexExcludeProposedPokemons(
+      init,
+      end,
+      proposedPokemonsIds
+    );
+  }
+
+  return index;
+};

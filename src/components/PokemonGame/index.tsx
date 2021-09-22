@@ -2,7 +2,10 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import React, { useEffect, useReducer } from "react";
 import { fetchPokemonById } from "../../actions/api-actions";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getRandonPokemonIndex } from "../../configurations/level-generations-config";
+import {
+  getRandonPokemonIndex,
+  getRandonPokemonIndexExcludeProposedPokemons,
+} from "../../configurations/level-generations-config";
 import {
   addPoint,
   addProposedPokemon,
@@ -39,7 +42,9 @@ const PokemonGame: React.FC = () => {
   const score = useAppSelector((state) => state.game.score);
   const lifes = useAppSelector((state) => state.game.lifes);
 
-  const proposedPokemons = useAppSelector((state) => state.game.proposedPokemons);
+  const proposedPokemons = useAppSelector(
+    (state) => state.game.proposedPokemons
+  );
 
   const isRightAnswer = state.isRightAnswer;
 
@@ -75,7 +80,15 @@ const PokemonGame: React.FC = () => {
         payload: null,
       });
 
-      const sortedPokemonIndex: number = getRandonPokemonIndex(init, end);
+      const proposedPokemonsIds: Array<number> = proposedPokemons.map(
+        (p) => p.id
+      );
+      const sortedPokemonIndex: number =
+        getRandonPokemonIndexExcludeProposedPokemons(
+          init,
+          end,
+          proposedPokemonsIds
+        );
 
       const promise: Promise<PayloadAction<any, string>> = reduxDispacher(
         fetchPokemonById(sortedPokemonIndex)
