@@ -3,7 +3,11 @@ import React, { useEffect, useReducer } from "react";
 import { fetchPokemonById } from "../../actions/api-actions";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getRandonPokemonIndex } from "../../configurations/level-generations-config";
-import { addPoint, lostALife } from "../../features/game/game-slice";
+import {
+  addPoint,
+  addProposedPokemon,
+  lostALife,
+} from "../../features/game/game-slice";
 import { Pokemon } from "../../features/game/types";
 import { useFetchPokemonsNamesQuery } from "../../features/pokemons/pokemons-names-slice";
 import useCountDownTimer from "../../hooks/countDown";
@@ -34,6 +38,8 @@ const PokemonGame: React.FC = () => {
   const gameIsOver = useAppSelector((state) => state.game.gameIsOver);
   const score = useAppSelector((state) => state.game.score);
   const lifes = useAppSelector((state) => state.game.lifes);
+
+  const proposedPokemons = useAppSelector((state) => state.game.proposedPokemons);
 
   const isRightAnswer = state.isRightAnswer;
 
@@ -93,6 +99,8 @@ const PokemonGame: React.FC = () => {
               currentPokemon: pokemon,
             } as PokemonGameReducerState,
           });
+
+          reduxDispacher(addProposedPokemon(pokemon));
         })
         .catch((error) => {
           console.error(error);
