@@ -4,11 +4,15 @@ import { PokemonGameReducerState } from "./types";
 export enum PokemonGameActionKind {
   INIT_QUIZ = "initQuiz",
   SET_OPTIONS_AND_CURRENT_POKEMON = "setOptionsAndCurrentPokemon",
+
+  START_COUNT_DOWN = "startCountDown",
+  STARTED_COUNT_DOWN = "startedCountDown",
+
   SET_ANSWER = "setAnswer",
-  END_QUIZ = "endQuiz",
-  CAN_SELECT_NEXT_POKEMON = "CanSelectNextProkemon",
-  SELECT_NEW_POKEMON = "SelectNewProkemon",
-  NOT_SELECT_NEW_POKEMON = "NotSelectNewProkemon",
+  END_CURRENT_QUIZ = "endCurrentQuiz",
+  CAN_SELECT_NEXT_POKEMON = "canSelectNextProkemon",
+  SELECT_NEW_POKEMON = "selectNewProkemon",
+  LOADING_NEW_POKEMON = "loadingNewProkemon",
 }
 
 interface PokemonGameAction {
@@ -30,7 +34,7 @@ const reducer = (state: PokemonGameReducerState, action: PokemonGameAction) => {
         selectNewProkemon: true,
         canSelectNextProkemon: false,
       };
-    case PokemonGameActionKind.NOT_SELECT_NEW_POKEMON:
+    case PokemonGameActionKind.LOADING_NEW_POKEMON:
       return {
         ...initialState,
         selectNewProkemon: false,
@@ -45,18 +49,32 @@ const reducer = (state: PokemonGameReducerState, action: PokemonGameAction) => {
         canSelectNextProkemon: false,
       } as PokemonGameReducerState;
 
+    case PokemonGameActionKind.START_COUNT_DOWN:
+      return {
+        ...state,
+        canStartCountDown: true,
+      } as PokemonGameReducerState;
+
+    case PokemonGameActionKind.STARTED_COUNT_DOWN:
+      return {
+        ...state,
+        canStartCountDown: false,
+      } as PokemonGameReducerState;
+
     case PokemonGameActionKind.SET_ANSWER:
       return {
         ...state,
         isRightAnswer: payload?.isRightAnswer,
         canSelectNextProkemon: true,
         endQuiz: true,
+        canStartCountDown: false,
       } as PokemonGameReducerState;
-    case PokemonGameActionKind.END_QUIZ:
+    case PokemonGameActionKind.END_CURRENT_QUIZ:
       return {
         ...state,
         endQuiz: true,
         canSelectNextProkemon: true,
+        canStartCountDown: false,
       } as PokemonGameReducerState;
     default:
       throw Error();

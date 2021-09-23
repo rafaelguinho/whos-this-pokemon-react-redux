@@ -50,12 +50,20 @@ const PokemonGame: React.FC = () => {
 
   const selectNewProkemon = state.selectNewProkemon && !gameIsOver;
 
+  const canStartCountDown = state.canStartCountDown && !gameIsOver;
+
   const canSelectNextProkemon = state.canSelectNextProkemon && !gameIsOver;
+
+  useEffect(() => {
+    if (gameIsOver) {
+      console.log("game over");
+    }
+  }, [gameIsOver]);
 
   useEffect(() => {
     if (timesUp) {
       reducerDispatch({
-        type: PokemonGameActionKind.END_QUIZ,
+        type: PokemonGameActionKind.END_CURRENT_QUIZ,
         payload: null,
       });
     }
@@ -65,18 +73,26 @@ const PokemonGame: React.FC = () => {
     if (timesUp && !isRightAnswer) {
       reduxDispacher(lostALife());
     }
-  }, [timesUp, isRightAnswer]);
+  }, [timesUp, isRightAnswer, reduxDispacher]);
 
   useEffect(() => {
-    if (selectNewProkemon) {
+    if (canStartCountDown) {
+      console.log("canStartCountDown");
+
+      reducerDispatch({
+        type: PokemonGameActionKind.STARTED_COUNT_DOWN,
+        payload: null,
+      });
+
       startRestartCountDown();
     }
-  }, [selectNewProkemon, startRestartCountDown]);
+  }, [canStartCountDown, startRestartCountDown]);
 
   useEffect(() => {
     if (selectNewProkemon && allPokemonsNames) {
+      console.log("selectNewProkemon");
       reducerDispatch({
-        type: PokemonGameActionKind.NOT_SELECT_NEW_POKEMON,
+        type: PokemonGameActionKind.LOADING_NEW_POKEMON,
         payload: null,
       });
 
@@ -96,8 +112,6 @@ const PokemonGame: React.FC = () => {
 
       promise
         .then((result) => {
-          console.log(result.payload);
-
           const pokemon = result.payload as Pokemon;
 
           const options: PokemonOption[] = createOptions(
@@ -114,6 +128,11 @@ const PokemonGame: React.FC = () => {
           });
 
           reduxDispacher(addProposedPokemon(pokemon));
+
+          reducerDispatch({
+            type: PokemonGameActionKind.START_COUNT_DOWN,
+            payload: null,
+          });
         })
         .catch((error) => {
           console.error(error);
@@ -126,6 +145,7 @@ const PokemonGame: React.FC = () => {
     reduxDispacher,
     init,
     end,
+    proposedPokemons,
   ]);
 
   const createOptions = (

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 const useCountDownTimer = (seconds: number) => {
   // initialize timeLeft with the seconds prop
-  const [timeLeft, setTimeLeft] = useState<number>(seconds);
+  const [timeLeft, setTimeLeft] = useState<number>(0);
   const [timesUp, setTimesUp] = useState<boolean>(true);
 
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
@@ -32,7 +32,7 @@ const useCountDownTimer = (seconds: number) => {
     return () => clearInterval(intervalId);
     // add timeLeft as a dependency to re-rerun the effect
     // when we update it
-  }, [timeLeft]);
+  }, [timeLeft, stoped]);
 
   const startRestartCountDown = (): void => {
     setStoped(false);

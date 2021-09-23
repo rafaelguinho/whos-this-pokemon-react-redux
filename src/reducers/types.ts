@@ -9,4 +9,5 @@ export interface PokemonGameReducerState {
   endQuiz: boolean;
   selectNewProkemon: boolean;
   canSelectNextProkemon: boolean;
+  canStartCountDown: boolean;
 }

@@ -11,7 +11,7 @@ const PokemonOptions: React.FC<PokemonOptionsProps> = ({
   return (
     <ul>
       {options.map((o) => (
-        <li
+        <li key={o.id}
           onClick={(e) => (isActive ? optionsClickAction(o) : function () {})}
         >
           {o.name}

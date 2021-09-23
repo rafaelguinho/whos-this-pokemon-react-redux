@@ -8,6 +8,7 @@ const initialState: PokemonGameReducerState = {
   endQuiz: false,
   canSelectNextProkemon: false,
   selectNewProkemon: true,
+  canStartCountDown: false,
 };
 
 export default initialState;
