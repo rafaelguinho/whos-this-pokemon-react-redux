@@ -5,24 +5,32 @@ import { PokemonDrawProps } from "./types";
 const PokemonDraw: React.FC<PokemonDrawProps> = ({
   selectedPokemonId,
   drawSilhouette,
+  actionAfterDraw,
 }: PokemonDrawProps) => {
   const imageBaseUrl = "assets/img/pokemons";
 
   useEffect(() => {
     if (!selectedPokemonId) return;
-    const imageUrl = `${imageBaseUrl}/${String(selectedPokemonId)}.png`;
 
-    const canvas: HTMLCanvasElement = document.getElementById(
-      "canvas"
-    ) as HTMLCanvasElement;
+    async function draw() {
+      const imageUrl = `${imageBaseUrl}/${String(selectedPokemonId)}.png`;
 
-    const imageDesigner = new ImageDesigner(imageUrl, canvas);
+      const canvas: HTMLCanvasElement = document.getElementById(
+        "canvas"
+      ) as HTMLCanvasElement;
 
-    if (drawSilhouette) {
-      imageDesigner.drawSilhouette();
-    } else {
-      imageDesigner.drawImage();
+      const imageDesigner = new ImageDesigner(imageUrl, canvas);
+
+      if (drawSilhouette) {
+        await imageDesigner.drawSilhouette();
+      } else {
+        await imageDesigner.drawImage();
+      }
+
+      actionAfterDraw();
     }
+
+    draw();
   }, [selectedPokemonId, drawSilhouette]);
 
   if (!selectedPokemonId) return <></>;

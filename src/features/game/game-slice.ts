@@ -13,6 +13,8 @@ interface GameState {
   lifes: number;
   timeIsOver: boolean;
   gameIsOver: boolean;
+  gameBeat: boolean;
+  isTheLastRound: boolean;
   levelConfigurations: LevelConfigurations;
   score: number;
   proposedPokemons: Array<Pokemon>;
@@ -22,6 +24,8 @@ const initialState: GameState = {
   lifes: 3,
   timeIsOver: false,
   gameIsOver: false,
+  gameBeat: false,
+  isTheLastRound: false,
   levelConfigurations: {
     level: 1,
     init: 1,
@@ -52,6 +56,10 @@ const gameSlice = createSlice({
     },
     addProposedPokemon(state, action: PayloadAction<Pokemon>) {
       state.proposedPokemons.push(action.payload);
+
+      if (state.proposedPokemons.length === state.levelConfigurations.end) {
+        state.isTheLastRound = true;
+      }
     },
     indicateStartTimer(state) {
       state.timeIsOver = false;
@@ -75,6 +83,10 @@ const gameSlice = createSlice({
     },
     addPoint(state) {
       state.score++;
+
+      if (state.isTheLastRound) {
+        state.gameBeat = true;
+      }
     },
   },
 });

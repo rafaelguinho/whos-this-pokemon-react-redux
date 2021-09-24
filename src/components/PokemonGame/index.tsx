@@ -39,6 +39,8 @@ const PokemonGame: React.FC = () => {
   );
 
   const gameIsOver = useAppSelector((state) => state.game.gameIsOver);
+  const gameBeat = useAppSelector((state) => state.game.gameBeat);
+  const isTheLastRound = useAppSelector((state) => state.game.isTheLastRound);
   const score = useAppSelector((state) => state.game.score);
   const lifes = useAppSelector((state) => state.game.lifes);
 
@@ -48,17 +50,26 @@ const PokemonGame: React.FC = () => {
 
   const isRightAnswer = state.isRightAnswer;
 
-  const selectNewProkemon = state.selectNewProkemon && !gameIsOver;
+  const selectNewProkemon =
+    state.selectNewProkemon && !gameIsOver && !isTheLastRound;
 
-  const canStartCountDown = state.canStartCountDown && !gameIsOver;
+  const canStartCountDown =
+    state.canStartCountDown && !gameIsOver && !isTheLastRound;
 
-  const canSelectNextProkemon = state.canSelectNextProkemon && !gameIsOver;
+  const canSelectNextProkemon =
+    state.canSelectNextProkemon && !gameIsOver && !isTheLastRound;
 
   useEffect(() => {
     if (gameIsOver) {
       console.log("game over");
     }
   }, [gameIsOver]);
+
+  useEffect(() => {
+    if (gameBeat) {
+      console.log("game Beat");
+    }
+  }, [gameBeat]);
 
   useEffect(() => {
     if (timesUp) {
@@ -128,11 +139,6 @@ const PokemonGame: React.FC = () => {
           });
 
           reduxDispacher(addProposedPokemon(pokemon));
-
-          reducerDispatch({
-            type: PokemonGameActionKind.START_COUNT_DOWN,
-            payload: null,
-          });
         })
         .catch((error) => {
           console.error(error);
@@ -201,6 +207,13 @@ const PokemonGame: React.FC = () => {
     });
   };
 
+  const startCountDown = () => {
+    reducerDispatch({
+      type: PokemonGameActionKind.START_COUNT_DOWN,
+      payload: null,
+    });
+  };
+
   return (
     <>
       <p>
@@ -210,6 +223,7 @@ const PokemonGame: React.FC = () => {
       <PokemonDraw
         selectedPokemonId={state.currentPokemon?.id}
         drawSilhouette={!isRightAnswer}
+        actionAfterDraw={startCountDown}
       />
 
       <PokemonOptions
