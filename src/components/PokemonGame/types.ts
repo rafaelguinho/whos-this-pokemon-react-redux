@@ -1,4 +1,3 @@
-export interface PokemonOption {
-  id: number;
-  name: string;
-}
+import { Option } from "../types";
+
+export interface PokemonOption extends Option {}

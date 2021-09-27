@@ -1,5 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useCallback } from "react";
 import { fetchPokemonById } from "../../actions/api-actions";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
@@ -207,44 +207,48 @@ const PokemonGame: React.FC = () => {
     });
   };
 
-  const startCountDown = () => {
+  const startCountDown = useCallback(() => {
     reducerDispatch({
       type: PokemonGameActionKind.START_COUNT_DOWN,
       payload: null,
     });
-  };
+  }, []);
 
   return (
     <>
-      <p>
-        {score} / {lifes}
-      </p>
-      <progress id="file" value={timeLeft} max="8"></progress>
-      <PokemonDraw
-        selectedPokemonId={state.currentPokemon?.id}
-        drawSilhouette={!isRightAnswer}
-        actionAfterDraw={startCountDown}
-      />
+      <div className="App">
+        <header className="App-header">
+          <p>
+            {score} / {lifes}
+          </p>
+          <progress id="file" value={timeLeft} max="8"></progress>
+          <PokemonDraw
+            selectedPokemonId={state.currentPokemon?.id}
+            drawSilhouette={!isRightAnswer}
+            actionAfterDraw={startCountDown}
+          />
 
-      <PokemonOptions
-        options={state.currentOptions}
-        isActive={!state.endQuiz}
-        optionsClickAction={checkAnswer}
-      />
-      {canSelectNextProkemon ? (
-        <button
-          onClick={(e) =>
-            reducerDispatch({
-              type: PokemonGameActionKind.SELECT_NEW_POKEMON,
-              payload: null,
-            })
-          }
-        >
-          New
-        </button>
-      ) : (
-        <></>
-      )}
+          <PokemonOptions
+            options={state.currentOptions}
+            isActive={!state.endQuiz}
+            optionsClickAction={checkAnswer}
+          />
+          {canSelectNextProkemon ? (
+            <button
+              onClick={(e) =>
+                reducerDispatch({
+                  type: PokemonGameActionKind.SELECT_NEW_POKEMON,
+                  payload: null,
+                })
+              }
+            >
+              New
+            </button>
+          ) : (
+            <></>
+          )}
+        </header>
+      </div>
     </>
   );
 };

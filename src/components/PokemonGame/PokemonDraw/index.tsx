@@ -23,15 +23,15 @@ const PokemonDraw: React.FC<PokemonDrawProps> = ({
 
       if (drawSilhouette) {
         await imageDesigner.drawSilhouette();
+        actionAfterDraw();
       } else {
         await imageDesigner.drawImage();
       }
 
-      actionAfterDraw();
     }
 
     draw();
-  }, [selectedPokemonId, drawSilhouette]);
+  }, [selectedPokemonId, drawSilhouette, actionAfterDraw]);
 
   if (!selectedPokemonId) return <></>;
 
