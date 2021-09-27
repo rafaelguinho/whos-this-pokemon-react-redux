@@ -1,5 +1,6 @@
 export interface PokemonDrawProps {
   selectedPokemonId: number | null | undefined;
   drawSilhouette: boolean;
-  actionAfterDraw: Function
+  actionAfterDrawSilhouette: Function;
+  actionAfterDrawImage: Function | null | undefined;
 }

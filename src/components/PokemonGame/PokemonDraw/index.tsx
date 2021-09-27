@@ -5,7 +5,8 @@ import { PokemonDrawProps } from "./types";
 const PokemonDraw: React.FC<PokemonDrawProps> = ({
   selectedPokemonId,
   drawSilhouette,
-  actionAfterDraw,
+  actionAfterDrawSilhouette,
+  actionAfterDrawImage,
 }: PokemonDrawProps) => {
   const imageBaseUrl = "assets/img/pokemons";
 
@@ -23,15 +24,23 @@ const PokemonDraw: React.FC<PokemonDrawProps> = ({
 
       if (drawSilhouette) {
         await imageDesigner.drawSilhouette();
-        actionAfterDraw();
+        actionAfterDrawSilhouette();
       } else {
         await imageDesigner.drawImage();
-      }
 
+        if (actionAfterDrawImage) {
+          actionAfterDrawImage();
+        }
+      }
     }
 
     draw();
-  }, [selectedPokemonId, drawSilhouette, actionAfterDraw]);
+  }, [
+    selectedPokemonId,
+    drawSilhouette,
+    actionAfterDrawSilhouette,
+    actionAfterDrawImage,
+  ]);
 
   if (!selectedPokemonId) return <></>;
 

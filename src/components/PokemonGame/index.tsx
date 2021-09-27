@@ -225,7 +225,7 @@ const PokemonGame: React.FC = () => {
           <PokemonDraw
             selectedPokemonId={state.currentPokemon?.id}
             drawSilhouette={!isRightAnswer}
-            actionAfterDraw={startCountDown}
+            actionAfterDrawSilhouette={startCountDown}
           />
 
           <PokemonOptions
