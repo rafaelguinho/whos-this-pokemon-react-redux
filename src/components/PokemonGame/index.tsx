@@ -1,5 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import React, { useEffect, useReducer, useCallback } from "react";
+import { useHistory } from "react-router";
 import { fetchPokemonById } from "../../actions/api-actions";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
@@ -9,6 +10,7 @@ import {
 import {
   addPoint,
   addProposedPokemon,
+  gameStated,
   lostALife,
 } from "../../features/game/game-slice";
 import { Pokemon } from "../../features/game/types";
@@ -25,6 +27,7 @@ import PokemonOptions from "./PokemonOptions";
 import { PokemonOption } from "./types";
 
 const PokemonGame: React.FC = () => {
+  let history = useHistory();
   const [state, reducerDispatch] = useReducer(reducer, initialState);
 
   const reduxDispacher = useAppDispatch();
@@ -34,9 +37,11 @@ const PokemonGame: React.FC = () => {
 
   const { data: allPokemonsNames } = useFetchPokemonsNamesQuery();
 
-  const { init, end } = useAppSelector(
+  const levelConfigurations = useAppSelector(
     (state) => state.game.levelConfigurations
   );
+
+  const canStartNewGame = useAppSelector((state) => state.game.canStartNewGame);
 
   const gameIsOver = useAppSelector((state) => state.game.gameIsOver);
   const gameBeat = useAppSelector((state) => state.game.gameBeat);
@@ -60,16 +65,33 @@ const PokemonGame: React.FC = () => {
     state.canSelectNextProkemon && !gameIsOver && !isTheLastRound;
 
   useEffect(() => {
+    if (canStartNewGame) {
+      reduxDispacher(gameStated());
+    }
+  }, [canStartNewGame, reduxDispacher]);
+
+  useEffect(() => {
+    if (!levelConfigurations) {
+      console.log("level not selected");
+
+      history.push("/");
+    }
+  }, [levelConfigurations, history]);
+
+  useEffect(() => {
     if (gameIsOver) {
       console.log("game over");
+
+      history.push("/game-over");
     }
-  }, [gameIsOver]);
+  }, [gameIsOver, history]);
 
   useEffect(() => {
     if (gameBeat) {
       console.log("game Beat");
+      history.push("/game-beat");
     }
-  }, [gameBeat]);
+  }, [gameBeat, history]);
 
   useEffect(() => {
     if (timesUp) {
@@ -100,7 +122,7 @@ const PokemonGame: React.FC = () => {
   }, [canStartCountDown, startRestartCountDown]);
 
   useEffect(() => {
-    if (selectNewProkemon && allPokemonsNames) {
+    if (selectNewProkemon && allPokemonsNames && levelConfigurations) {
       console.log("selectNewProkemon");
       reducerDispatch({
         type: PokemonGameActionKind.LOADING_NEW_POKEMON,
@@ -112,8 +134,8 @@ const PokemonGame: React.FC = () => {
       );
       const sortedPokemonIndex: number =
         getRandonPokemonIndexExcludeProposedPokemons(
-          init,
-          end,
+          levelConfigurations?.init,
+          levelConfigurations?.end,
           proposedPokemonsIds
         );
 
@@ -149,8 +171,7 @@ const PokemonGame: React.FC = () => {
     allPokemonsNames,
     reducerDispatch,
     reduxDispacher,
-    init,
-    end,
+    levelConfigurations,
     proposedPokemons,
   ]);
 

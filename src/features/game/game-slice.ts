@@ -10,27 +10,25 @@ interface LevelConfigurations {
 }
 
 interface GameState {
+  canStartNewGame: boolean;
   lifes: number;
   timeIsOver: boolean;
   gameIsOver: boolean;
   gameBeat: boolean;
   isTheLastRound: boolean;
-  levelConfigurations: LevelConfigurations;
+  levelConfigurations: LevelConfigurations | null;
   score: number;
   proposedPokemons: Array<Pokemon>;
 }
 
 const initialState: GameState = {
+  canStartNewGame: true,
   lifes: 3,
   timeIsOver: false,
   gameIsOver: false,
   gameBeat: false,
   isTheLastRound: false,
-  levelConfigurations: {
-    level: 1,
-    init: 1,
-    end: 151,
-  },
+  levelConfigurations: null,
   score: 0,
   proposedPokemons: [],
 };
@@ -40,7 +38,16 @@ const gameSlice = createSlice({
   initialState,
   reducers: {
     startNewGame(state) {
-      state = initialState;
+      state.canStartNewGame = initialState.canStartNewGame;
+      state.lifes = initialState.lifes;
+      state.timeIsOver = initialState.timeIsOver;
+      state.gameIsOver = initialState.gameIsOver;
+      state.gameBeat = initialState.gameBeat;
+      state.score = initialState.score;
+      state.proposedPokemons = initialState.proposedPokemons;
+    },
+    gameStated(state) {
+      state.canStartNewGame = false;
     },
     lostALife(state) {
       if (state.lifes >= 1) {
@@ -57,7 +64,7 @@ const gameSlice = createSlice({
     addProposedPokemon(state, action: PayloadAction<Pokemon>) {
       state.proposedPokemons.push(action.payload);
 
-      if (state.proposedPokemons.length === state.levelConfigurations.end) {
+      if (state.proposedPokemons.length === state?.levelConfigurations?.end) {
         state.isTheLastRound = true;
       }
     },
@@ -93,6 +100,7 @@ const gameSlice = createSlice({
 
 export const {
   startNewGame,
+  gameStated,
   lostALife,
   indicateTimeIsOver,
   indicateStartTimer,

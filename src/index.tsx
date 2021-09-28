@@ -9,6 +9,8 @@ import { store } from "./app/store";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import PokemonGame from "./components/PokemonGame";
+import GameOverScreen from "./components/GameOverScreen";
+import GameBeatScreen from "./components/GameBeatScreen";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -17,6 +19,12 @@ ReactDOM.render(
         <Switch>
           <Route path="/game">
             <PokemonGame />
+          </Route>
+          <Route path="/game-over">
+            <GameOverScreen />
+          </Route>
+          <Route path="/game-beat">
+            <GameBeatScreen />
           </Route>
           <Route path="/">
             <App />

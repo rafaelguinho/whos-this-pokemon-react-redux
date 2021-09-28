@@ -1,6 +1,6 @@
-import React from "react";
-import { useAppDispatch } from "../../app/hooks";
-import { setLevel } from "../../features/game/game-slice";
+import React, {useEffect} from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setLevel, startNewGame } from "../../features/game/game-slice";
 import { Option } from "../types";
 import OptionsSelectOne from "../OptionsSelectOne";
 import { useHistory } from "react-router";
@@ -8,6 +8,10 @@ import { useHistory } from "react-router";
 const MainMenu: React.FC = () => {
   let history = useHistory();
   const dispatch = useAppDispatch();
+
+  const canStartNewGame = useAppSelector(
+    (state) => state.game.canStartNewGame
+  );
 
   const options: Option[] = [
     {
@@ -24,10 +28,18 @@ const MainMenu: React.FC = () => {
     },
   ];
 
+  useEffect(() => {
+    if (canStartNewGame) {
+      console.log("canStartNewGame");
+
+      history.push("/game");
+    }
+  }, [canStartNewGame, history]);
+
   const optionsClickAction = (o: Option) => {
     dispatch(setLevel(o.id));
+    dispatch(startNewGame());
     console.log(o.name);
-    history.push("/game");
   };
 
   return (
