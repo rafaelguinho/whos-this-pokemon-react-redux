@@ -5,6 +5,7 @@ const initialState: PokemonGameReducerState = {
   currentPokemon: null,
   isRightAnswer: null,
   pokemonAnswer: null,
+  answered: false,
   endQuiz: false,
   canSelectNextProkemon: false,
   selectNewProkemon: true,

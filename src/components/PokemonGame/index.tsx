@@ -42,6 +42,7 @@ const PokemonGame: React.FC = () => {
   );
 
   const canStartNewGame = useAppSelector((state) => state.game.canStartNewGame);
+  const gameStarted = useAppSelector((state) => state.game.gameStarted);
 
   const gameIsOver = useAppSelector((state) => state.game.gameIsOver);
   const gameBeat = useAppSelector((state) => state.game.gameBeat);
@@ -103,10 +104,11 @@ const PokemonGame: React.FC = () => {
   }, [timesUp]);
 
   useEffect(() => {
-    if (timesUp && !isRightAnswer) {
+    if (timesUp && gameStarted) {
+      console.log("lostALife");
       reduxDispacher(lostALife());
     }
-  }, [timesUp, isRightAnswer, reduxDispacher]);
+  }, [timesUp, gameStarted, reduxDispacher]);
 
   useEffect(() => {
     if (canStartCountDown) {

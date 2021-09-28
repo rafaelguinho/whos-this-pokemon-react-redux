@@ -64,6 +64,7 @@ const reducer = (state: PokemonGameReducerState, action: PokemonGameAction) => {
     case PokemonGameActionKind.SET_ANSWER:
       return {
         ...state,
+        answered: true,
         isRightAnswer: payload?.isRightAnswer,
         canSelectNextProkemon: true,
         endQuiz: true,
@@ -73,6 +74,7 @@ const reducer = (state: PokemonGameReducerState, action: PokemonGameAction) => {
       return {
         ...state,
         endQuiz: true,
+        answered: false,
         canSelectNextProkemon: true,
         canStartCountDown: false,
       } as PokemonGameReducerState;

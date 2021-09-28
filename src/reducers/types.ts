@@ -5,6 +5,7 @@ export interface PokemonGameReducerState {
   currentOptions: PokemonOption[] | null;
   currentPokemon: Pokemon | null;
   pokemonAnswer: Pokemon | null;
+  answered: boolean;
   isRightAnswer: boolean | null;
   endQuiz: boolean;
   selectNewProkemon: boolean;

@@ -11,6 +11,7 @@ interface LevelConfigurations {
 
 interface GameState {
   canStartNewGame: boolean;
+  gameStarted: boolean;
   lifes: number;
   timeIsOver: boolean;
   gameIsOver: boolean;
@@ -23,6 +24,7 @@ interface GameState {
 
 const initialState: GameState = {
   canStartNewGame: true,
+  gameStarted: false,
   lifes: 3,
   timeIsOver: false,
   gameIsOver: false,
@@ -39,6 +41,7 @@ const gameSlice = createSlice({
   reducers: {
     startNewGame(state) {
       state.canStartNewGame = initialState.canStartNewGame;
+      state.gameStarted = initialState.gameStarted;
       state.lifes = initialState.lifes;
       state.timeIsOver = initialState.timeIsOver;
       state.gameIsOver = initialState.gameIsOver;
@@ -48,6 +51,7 @@ const gameSlice = createSlice({
     },
     gameStated(state) {
       state.canStartNewGame = false;
+      state.gameStarted = true;
     },
     lostALife(state) {
       if (state.lifes >= 1) {

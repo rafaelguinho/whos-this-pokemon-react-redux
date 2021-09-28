@@ -3,13 +3,17 @@ import { useState, useEffect } from "react";
 const useCountDownTimer = (seconds: number) => {
   // initialize timeLeft with the seconds prop
   const [timeLeft, setTimeLeft] = useState<number>(0);
-  const [timesUp, setTimesUp] = useState<boolean>(true);
+  const [timesUp, setTimesUp] = useState<boolean>(false);
 
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
-  const [stoped, setStoped] = useState<boolean>(false);
+  const [stoped, setStoped] = useState<boolean>(true);
 
   useEffect(() => {
+    if (stoped) {
+      return;
+    }
+
     // exit early when we reach 0
     if (!timeLeft) {
       setTimesUp(true);
