@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Option } from "../types";
+import { OptionItem, OptionList } from "./styles";
 import { OptionsProps } from "./types";
 
 const OptionsSelectOne: React.FC<OptionsProps> = ({
@@ -20,9 +21,9 @@ const OptionsSelectOne: React.FC<OptionsProps> = ({
   if (!options) return <></>;
 
   return (
-    <ul>
+    <OptionList>
       {options.map((o) => (
-        <li
+        <OptionItem
           className={
             selectedOption && selectedOption.id
               ? selectedOption.id === o.id
@@ -34,9 +35,9 @@ const OptionsSelectOne: React.FC<OptionsProps> = ({
           onClick={() => (isActive ? selectOption(o) : () => {})}
         >
           {o.name}
-        </li>
+        </OptionItem>
       ))}
-    </ul>
+    </OptionList>
   );
 };
 
