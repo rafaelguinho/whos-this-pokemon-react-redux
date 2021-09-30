@@ -2,6 +2,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import React, { useEffect, useReducer, useCallback } from "react";
 import { useHistory } from "react-router";
 import { fetchPokemonById } from "../../actions/api-actions";
+import { AppContainer } from "../../app-styles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   getRandonPokemonIndex,
@@ -239,8 +240,7 @@ const PokemonGame: React.FC = () => {
 
   return (
     <>
-      <div className="App">
-        <header className="App-header">
+      <AppContainer>
           <p>
             {score} / {lifes}
           </p>
@@ -270,8 +270,7 @@ const PokemonGame: React.FC = () => {
           ) : (
             <></>
           )}
-        </header>
-      </div>
+      </AppContainer>
     </>
   );
 };

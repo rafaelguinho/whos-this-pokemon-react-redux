@@ -1,7 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import "./App.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
@@ -11,9 +9,11 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import PokemonGame from "./components/PokemonGame";
 import GameOverScreen from "./components/GameOverScreen";
 import GameBeatScreen from "./components/GameBeatScreen";
+import GlobalStyle from "./global-styles";
 
 ReactDOM.render(
   <React.StrictMode>
+    <GlobalStyle />
     <Provider store={store}>
       <Router>
         <Switch>

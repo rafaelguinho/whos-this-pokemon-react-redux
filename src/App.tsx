@@ -1,14 +1,12 @@
+import { AppContainer } from "./app-styles";
 import MainMenu from "./components/MainMenu";
 
 function App() {
-
   return (
     <>
-      <div className="App">
-        <header className="App-header">
-          <MainMenu />
-        </header>
-      </div>
+      <AppContainer>
+        <MainMenu />
+      </AppContainer>
     </>
   );
 }
