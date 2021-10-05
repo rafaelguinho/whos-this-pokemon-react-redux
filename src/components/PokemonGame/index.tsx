@@ -23,6 +23,7 @@ import reducer, {
 import initialState from "../../reducers/pokemonGameReducerInitialState";
 import { PokemonGameReducerState } from "../../reducers/types";
 import { capitalize, shuffle } from "../../util/util";
+import LifesPanel from "../LifesPanel";
 import PokemonDraw from "./PokemonDraw";
 import PokemonOptions from "./PokemonOptions";
 import { PokemonOption } from "./types";
@@ -241,35 +242,33 @@ const PokemonGame: React.FC = () => {
   return (
     <>
       <AppContainer>
-          <p>
-            {score} / {lifes}
-          </p>
-          <progress id="file" value={timeLeft} max="8"></progress>
-          <PokemonDraw
-            selectedPokemonId={state.currentPokemon?.id}
-            drawSilhouette={!isRightAnswer}
-            actionAfterDrawSilhouette={startCountDown}
-          />
+        <LifesPanel />
+        <progress id="file" value={timeLeft} max="8"></progress>
+        <PokemonDraw
+          selectedPokemonId={state.currentPokemon?.id}
+          drawSilhouette={!isRightAnswer}
+          actionAfterDrawSilhouette={startCountDown}
+        />
 
-          <PokemonOptions
-            options={state.currentOptions}
-            isActive={!state.endQuiz}
-            optionsClickAction={checkAnswer}
-          />
-          {canSelectNextProkemon ? (
-            <button
-              onClick={(e) =>
-                reducerDispatch({
-                  type: PokemonGameActionKind.SELECT_NEW_POKEMON,
-                  payload: null,
-                })
-              }
-            >
-              New
-            </button>
-          ) : (
-            <></>
-          )}
+        <PokemonOptions
+          options={state.currentOptions}
+          isActive={!state.endQuiz}
+          optionsClickAction={checkAnswer}
+        />
+        {canSelectNextProkemon ? (
+          <button
+            onClick={(e) =>
+              reducerDispatch({
+                type: PokemonGameActionKind.SELECT_NEW_POKEMON,
+                payload: null,
+              })
+            }
+          >
+            New
+          </button>
+        ) : (
+          <></>
+        )}
       </AppContainer>
     </>
   );
