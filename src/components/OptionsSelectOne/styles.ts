@@ -12,12 +12,31 @@ const OptionItem = styled.li`
   padding: 0.1em 0;
   cursor: pointer;
   list-style: none;
-
+border-radius: 2px;
   transition: 0.2s;
+
+  
 
   &:hover {
     background-color: yellow;
     color: black;
+  }
+
+  &.highlighter{
+    background-color: yellow;
+    color: black;
+    cursor:default
+  }
+
+  &.not-highlighter{
+    background-color: initial;
+    color: initial;
+    opacity: .5;
+  }
+
+  &.not-highlighter:hover {
+    cursor: not-allowed;
+    opacity: .5;
   }
 `;
 

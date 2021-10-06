@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Option } from "../types";
 import { OptionItem, OptionList } from "./styles";
 import { OptionsProps } from "./types";
@@ -12,6 +12,11 @@ const OptionsSelectOne: React.FC<OptionsProps> = ({
   const [selectedOption, setSelectedOption] = useState<
     Option | null | undefined
   >(defaultSelectedOption);
+
+
+  useEffect(() => {
+    setSelectedOption(defaultSelectedOption);
+  }, [options]);
 
   const selectOption = (option: Option) => {
     optionsClickAction(option);
@@ -29,10 +34,10 @@ const OptionsSelectOne: React.FC<OptionsProps> = ({
               ? selectedOption.id === o.id
                 ? "highlighter"
                 : "not-highlighter"
-              : ""
+              : isActive ? "" : "not-highlighter"
           }
           key={o.id}
-          onClick={() => (isActive ? selectOption(o) : () => {})}
+          onClick={() => (isActive ? selectOption(o) : () => { })}
         >
           {o.name}
         </OptionItem>
