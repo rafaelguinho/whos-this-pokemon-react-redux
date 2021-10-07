@@ -8,7 +8,6 @@ export class ImageDesigner {
       this._imageUrl,
       this._canvas
     );
-    console.log("here");
     imageDrawnData.context?.drawImage(
       imageDrawnData.image,
       0,

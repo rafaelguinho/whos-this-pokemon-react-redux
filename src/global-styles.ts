@@ -9,6 +9,11 @@ const GlobalStyle = createGlobalStyle`
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+p{
+  margin-block-start: .7em;
+    margin-block-end: .7em;
+}
 `;
 
 export default GlobalStyle;

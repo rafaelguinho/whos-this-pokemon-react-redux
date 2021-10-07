@@ -2,7 +2,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import React, { useEffect, useReducer, useCallback } from "react";
 import { useHistory } from "react-router";
 import { fetchPokemonById } from "../../actions/api-actions";
-import { AppContainer } from "../../app-styles";
+import { AppContainer, GameInfoBar } from "../../app-styles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   getRandonPokemonIndex,
@@ -23,7 +23,9 @@ import reducer, {
 import initialState from "../../reducers/pokemonGameReducerInitialState";
 import { PokemonGameReducerState } from "../../reducers/types";
 import { capitalize, shuffle } from "../../util/util";
+import Button from "../Button/styles";
 import LifesPanel from "../LifesPanel";
+import ScorePanel from "../ScorePanel";
 import PokemonDraw from "./PokemonDraw";
 import PokemonOptions from "./PokemonOptions";
 import { PokemonOption } from "./types";
@@ -242,8 +244,11 @@ const PokemonGame: React.FC = () => {
   return (
     <>
       <AppContainer>
-        <LifesPanel />
-        <progress id="file" value={timeLeft} max="8"></progress>
+        <GameInfoBar>
+          <ScorePanel />
+          <progress id="file" value={timeLeft} max="8"></progress>
+          <LifesPanel />
+        </GameInfoBar>
         <PokemonDraw
           selectedPokemonId={state.currentPokemon?.id}
           drawSilhouette={!isRightAnswer}
@@ -255,20 +260,17 @@ const PokemonGame: React.FC = () => {
           isActive={!state.endQuiz}
           optionsClickAction={checkAnswer}
         />
-        {canSelectNextProkemon ? (
-          <button
-            onClick={(e) =>
-              reducerDispatch({
-                type: PokemonGameActionKind.SELECT_NEW_POKEMON,
-                payload: null,
-              })
-            }
-          >
-            New
-          </button>
-        ) : (
-          <></>
-        )}
+        <Button
+          show={canSelectNextProkemon}
+          onClick={(e) =>
+            reducerDispatch({
+              type: PokemonGameActionKind.SELECT_NEW_POKEMON,
+              payload: null,
+            })
+          }
+        >
+          Next
+        </Button>
       </AppContainer>
     </>
   );

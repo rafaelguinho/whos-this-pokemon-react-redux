@@ -7,9 +7,18 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding:0 1em;
 `;
 
-export { AppContainer };
+const GameInfoBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  
+`;
+
+export { AppContainer, GameInfoBar };

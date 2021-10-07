@@ -8,7 +8,7 @@ const OptionList = styled.ul`
 `;
 
 const OptionItem = styled.li`
-  margin: 1em;
+  margin: .8em;
   padding: 0.1em 0;
   cursor: pointer;
   list-style: none;

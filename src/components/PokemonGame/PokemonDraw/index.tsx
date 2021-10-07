@@ -46,7 +46,7 @@ const PokemonDraw: React.FC<PokemonDrawProps> = ({
 
   return (
     <>
-      <canvas id="canvas"></canvas>
+      <canvas id="canvas" height="300"></canvas>
     </>
   );
 };
