@@ -8,35 +8,36 @@ const OptionList = styled.ul`
 `;
 
 const OptionItem = styled.li`
-  margin: .8em;
+  margin: 0.8em;
   padding: 0.1em 0;
   cursor: pointer;
   list-style: none;
-border-radius: 2px;
+  border-radius: 2px;
   transition: 0.2s;
-
-  
 
   &:hover {
     background-color: yellow;
     color: black;
   }
 
-  &.highlighter{
-    background-color: yellow;
+  &.highlighter {
+    background-color: ${(props) => (props.wrongOption ? "#b33939" : "yellow")};
+    text-decoration: ${(props) =>
+      props.wrongOption ? "line-through" : "none"};
+    border: ${(props) => (props.wrongOption ? "1px solid" : "none")};
     color: black;
-    cursor:default
+    cursor: default;
   }
 
-  &.not-highlighter{
+  &.not-highlighter {
     background-color: initial;
     color: initial;
-    opacity: .5;
+    opacity: 0.5;
   }
 
   &.not-highlighter:hover {
     cursor: not-allowed;
-    opacity: .5;
+    opacity: 0.5;
   }
 `;
 

@@ -25,7 +25,7 @@ const MainMenu: React.FC = () => {
     {
       id: 3,
       name: "Hard",
-    },
+    }
   ];
 
   useEffect(() => {

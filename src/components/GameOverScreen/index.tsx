@@ -6,11 +6,9 @@ const GameOverScreen: React.FC = () => {
   let history = useHistory();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Game over</h1>
-        <Button onClick={(e) => history.push("/")}>New game</Button>
-      </header>
+    <div>
+      <h1>Game over</h1>
+      <Button show onClick={(e) => history.push("/")}>New game</Button>
     </div>
   );
 };

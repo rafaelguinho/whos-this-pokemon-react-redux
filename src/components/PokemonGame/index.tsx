@@ -257,6 +257,7 @@ const PokemonGame: React.FC = () => {
 
         <PokemonOptions
           options={state.currentOptions}
+          wrongOptionSelected={isRightAnswer != null && isRightAnswer === false}
           isActive={!state.endQuiz}
           optionsClickAction={checkAnswer}
         />

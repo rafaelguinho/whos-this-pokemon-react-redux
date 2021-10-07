@@ -76,7 +76,7 @@ const gameSlice = createSlice({
       state.timeIsOver = false;
     },
     setLevel(state, action: PayloadAction<number>) {
-      var allowedLevels: Array<number> = [1, 2, 3];
+      var allowedLevels: Array<number> = [1, 2, 3, 4];
 
       if (allowedLevels.some((l) => l === action.payload)) {
         const level: number = action.payload;
