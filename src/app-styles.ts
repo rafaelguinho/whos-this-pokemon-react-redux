@@ -10,7 +10,7 @@ const AppContainer = styled.div`
   justify-content: space-around;
   font-size: calc(10px + 2vmin);
   color: white;
-  padding:0 1em;
+  padding: 0 1em;
 `;
 
 const GameInfoBar = styled.div`
@@ -18,7 +18,12 @@ const GameInfoBar = styled.div`
   justify-content: space-between;
   width: 100%;
   align-items: center;
-  
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    position: relative;
+    justify-content: center;
+  }
 `;
 
 export { AppContainer, GameInfoBar };

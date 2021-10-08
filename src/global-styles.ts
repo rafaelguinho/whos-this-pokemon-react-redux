@@ -11,8 +11,8 @@ const GlobalStyle = createGlobalStyle`
 }
 
 p{
-  margin-block-start: .7em;
-    margin-block-end: .7em;
+  margin-block-start: .3em;
+    margin-block-end: .4em;
 }
 `;
 

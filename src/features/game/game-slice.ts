@@ -42,7 +42,6 @@ const gameSlice = createSlice({
     startNewGame(state) {
       state.canStartNewGame = initialState.canStartNewGame;
       state.gameStarted = initialState.gameStarted;
-      state.lifes = initialState.lifes;
       state.timeIsOver = initialState.timeIsOver;
       state.gameIsOver = initialState.gameIsOver;
       state.gameBeat = initialState.gameBeat;
@@ -81,6 +80,10 @@ const gameSlice = createSlice({
       if (allowedLevels.some((l) => l === action.payload)) {
         const level: number = action.payload;
 
+        if (level > 2) {
+          state.lifes = 4;
+        }
+
         const { init, end }: RangePokemons = getPokemonsRange(level);
 
         const newLevelConfigurations: LevelConfigurations = {
@@ -90,6 +93,7 @@ const gameSlice = createSlice({
         };
 
         state.levelConfigurations = newLevelConfigurations;
+        
       }
     },
     addPoint(state) {

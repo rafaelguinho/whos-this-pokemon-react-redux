@@ -8,9 +8,14 @@ const Life = styled.img`
 `;
 
 const LifePanel = styled.div`
-display: flex;
-justify-content: flex-end;
-  width: 144.75px;
+  display: flex;
+  justify-content: flex-end;
+  width: 155.75px;
+
+  @media (max-width: 800px) {
+    margin-top: 0.5em;
+    width: auto;
+  }
 `;
 
 export { LifePanel, Life };

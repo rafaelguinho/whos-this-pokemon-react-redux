@@ -5,7 +5,9 @@ const ScorePanel: React.FC = () => {
   const score: number = useAppSelector((state) => state.game.score);
   return (
     <div>
-      <p>{score} pts</p>
+      <p>
+        {score} {score <= 1 ? "pt" : "pts"}
+      </p>
     </div>
   );
 };

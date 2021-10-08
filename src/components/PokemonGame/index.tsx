@@ -51,8 +51,6 @@ const PokemonGame: React.FC = () => {
   const gameIsOver = useAppSelector((state) => state.game.gameIsOver);
   const gameBeat = useAppSelector((state) => state.game.gameBeat);
   const isTheLastRound = useAppSelector((state) => state.game.isTheLastRound);
-  const score = useAppSelector((state) => state.game.score);
-  const lifes = useAppSelector((state) => state.game.lifes);
 
   const proposedPokemons = useAppSelector(
     (state) => state.game.proposedPokemons
@@ -244,11 +242,13 @@ const PokemonGame: React.FC = () => {
   return (
     <>
       <AppContainer>
+
         <GameInfoBar>
           <ScorePanel />
           <progress id="file" value={timeLeft} max="8"></progress>
           <LifesPanel />
         </GameInfoBar>
+
         <PokemonDraw
           selectedPokemonId={state.currentPokemon?.id}
           drawSilhouette={!isRightAnswer}

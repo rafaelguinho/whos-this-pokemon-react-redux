@@ -16,7 +16,7 @@ const OptionsSelectOne: React.FC<OptionsProps> = ({
 
   useEffect(() => {
     setSelectedOption(defaultSelectedOption);
-  }, [options]);
+  }, [options, defaultSelectedOption]);
 
   const selectOption = (option: Option) => {
     optionsClickAction(option);
