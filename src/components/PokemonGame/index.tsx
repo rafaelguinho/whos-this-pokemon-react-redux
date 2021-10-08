@@ -75,7 +75,6 @@ const PokemonGame: React.FC = () => {
 
   useEffect(() => {
     if (!levelConfigurations) {
-      console.log("level not selected");
 
       history.push("/");
     }
@@ -83,7 +82,6 @@ const PokemonGame: React.FC = () => {
 
   useEffect(() => {
     if (gameIsOver) {
-      console.log("game over");
 
       history.push("/game-over");
     }
@@ -91,7 +89,6 @@ const PokemonGame: React.FC = () => {
 
   useEffect(() => {
     if (gameBeat) {
-      console.log("game Beat");
       history.push("/game-beat");
     }
   }, [gameBeat, history]);
@@ -107,14 +104,12 @@ const PokemonGame: React.FC = () => {
 
   useEffect(() => {
     if (timesUp && gameStarted) {
-      console.log("lostALife");
       reduxDispacher(lostALife());
     }
   }, [timesUp, gameStarted, reduxDispacher]);
 
   useEffect(() => {
     if (canStartCountDown) {
-      console.log("canStartCountDown");
 
       reducerDispatch({
         type: PokemonGameActionKind.STARTED_COUNT_DOWN,
@@ -127,7 +122,6 @@ const PokemonGame: React.FC = () => {
 
   useEffect(() => {
     if (selectNewProkemon && allPokemonsNames && levelConfigurations) {
-      console.log("selectNewProkemon");
       reducerDispatch({
         type: PokemonGameActionKind.LOADING_NEW_POKEMON,
         payload: null,
@@ -210,13 +204,10 @@ const PokemonGame: React.FC = () => {
 
     let isRightAnswer: boolean = false;
     if (selectedOption.id === state.currentPokemon?.id) {
-      console.log("right answer");
-
       isRightAnswer = true;
 
       reduxDispacher(addPoint());
     } else {
-      console.log("wrong answer");
 
       isRightAnswer = false;
 

@@ -30,7 +30,6 @@ const MainMenu: React.FC = () => {
 
   useEffect(() => {
     if (canStartNewGame) {
-      console.log("canStartNewGame");
 
       history.push("/game");
     }
@@ -39,7 +38,6 @@ const MainMenu: React.FC = () => {
   const optionsClickAction = (o: Option) => {
     dispatch(setLevel(o.id));
     dispatch(startNewGame());
-    console.log(o.name);
   };
 
   return (
