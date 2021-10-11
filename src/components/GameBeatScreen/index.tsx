@@ -1,17 +1,20 @@
 import React from "react";
 import { useHistory } from "react-router";
+import { AppContainer } from "../../app-styles";
 import Button from "../Button/styles";
 
 const GameBeatScreen: React.FC = () => {
   let history = useHistory();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Game beat</h1>
-        <Button onClick={(e) => history.push("/")}>New game</Button>
-      </header>
-    </div>
+    <AppContainer>
+      <div>
+        <h1>Congratulations!</h1>
+        <Button show onClick={(e) => history.push("/")}>
+          New game
+        </Button>
+      </div>
+    </AppContainer>
   );
 };
 
