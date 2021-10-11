@@ -35,6 +35,13 @@ const initialState: GameState = {
   proposedPokemons: [],
 };
 
+const levelLifes = {
+  1: 3,
+  2: 3,
+  3: 4,
+  4: 4,
+};
+
 const gameSlice = createSlice({
   name: "game",
   initialState,
@@ -80,9 +87,7 @@ const gameSlice = createSlice({
       if (allowedLevels.some((l) => l === action.payload)) {
         const level: number = action.payload;
 
-        if (level > 2) {
-          state.lifes = 4;
-        }
+        state.lifes = levelLifes[level];
 
         const { init, end }: RangePokemons = getPokemonsRange(level);
 
@@ -93,7 +98,6 @@ const gameSlice = createSlice({
         };
 
         state.levelConfigurations = newLevelConfigurations;
-        
       }
     },
     addPoint(state) {
