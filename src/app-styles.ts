@@ -7,10 +7,14 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
   font-size: calc(10px + 2vmin);
   color: white;
   padding: 0 1em;
+`;
+
+const ButtonBottomContainer = styled.div`
+margin-bottom: 1em;
 `;
 
 const GameInfoBar = styled.div`
@@ -26,4 +30,4 @@ const GameInfoBar = styled.div`
   }
 `;
 
-export { AppContainer, GameInfoBar };
+export { AppContainer, GameInfoBar, ButtonBottomContainer };

@@ -2,7 +2,11 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import React, { useEffect, useReducer, useCallback } from "react";
 import { useHistory } from "react-router";
 import { fetchPokemonById } from "../../actions/api-actions";
-import { AppContainer, GameInfoBar } from "../../app-styles";
+import {
+  AppContainer,
+  ButtonBottomContainer,
+  GameInfoBar,
+} from "../../app-styles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   getRandonPokemonIndex,
@@ -75,14 +79,12 @@ const PokemonGame: React.FC = () => {
 
   useEffect(() => {
     if (!levelConfigurations) {
-
       history.push("/");
     }
   }, [levelConfigurations, history]);
 
   useEffect(() => {
     if (gameIsOver) {
-
       history.push("/game-over");
     }
   }, [gameIsOver, history]);
@@ -110,7 +112,6 @@ const PokemonGame: React.FC = () => {
 
   useEffect(() => {
     if (canStartCountDown) {
-
       reducerDispatch({
         type: PokemonGameActionKind.STARTED_COUNT_DOWN,
         payload: null,
@@ -162,6 +163,25 @@ const PokemonGame: React.FC = () => {
         })
         .catch((error) => {
           console.error(error);
+
+          const pokemon = allPokemonsNames.find(
+            (n) => n.id === sortedPokemonIndex
+          ) as Pokemon;
+
+          const options: PokemonOption[] = createOptions(
+            pokemon,
+            allPokemonsNames
+          );
+
+          reducerDispatch({
+            type: PokemonGameActionKind.SET_OPTIONS_AND_CURRENT_POKEMON,
+            payload: {
+              currentOptions: options,
+              currentPokemon: pokemon,
+            } as PokemonGameReducerState,
+          });
+
+          reduxDispacher(addProposedPokemon(pokemon));
         });
     }
   }, [
@@ -208,7 +228,6 @@ const PokemonGame: React.FC = () => {
 
       reduxDispacher(addPoint());
     } else {
-
       isRightAnswer = false;
 
       reduxDispacher(lostALife());
@@ -233,7 +252,6 @@ const PokemonGame: React.FC = () => {
   return (
     <>
       <AppContainer>
-
         <GameInfoBar>
           <ScorePanel />
           <progress id="file" value={timeLeft} max="8"></progress>
@@ -252,17 +270,19 @@ const PokemonGame: React.FC = () => {
           isActive={!state.endQuiz}
           optionsClickAction={checkAnswer}
         />
-        <Button
-          show={canSelectNextProkemon}
-          onClick={(e) =>
-            reducerDispatch({
-              type: PokemonGameActionKind.SELECT_NEW_POKEMON,
-              payload: null,
-            })
-          }
-        >
-          Next
-        </Button>
+        <ButtonBottomContainer>
+          <Button
+            show={canSelectNextProkemon}
+            onClick={(e) =>
+              reducerDispatch({
+                type: PokemonGameActionKind.SELECT_NEW_POKEMON,
+                payload: null,
+              })
+            }
+          >
+            Next
+          </Button>
+        </ButtonBottomContainer>
       </AppContainer>
     </>
   );

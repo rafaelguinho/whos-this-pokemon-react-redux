@@ -42,11 +42,9 @@ const PokemonDraw: React.FC<PokemonDrawProps> = ({
     actionAfterDrawImage,
   ]);
 
-  if (!selectedPokemonId) return <></>;
-
   return (
     <>
-      <canvas id="canvas" height="300"></canvas>
+      <canvas id="canvas" width="240" height="240"></canvas>
     </>
   );
 };

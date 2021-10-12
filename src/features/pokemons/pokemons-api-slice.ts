@@ -22,6 +22,11 @@ export const apiSlice = createApi({
           return `/pokemon?limit=${limit}`;
         },
       }),
+      fetchPokemonsFallback: builder.query<Pokemon[], void>({
+        query() {
+          return `/data.json`;
+        },
+      }),
       getPokemon: builder.query<Pokemon, number>({
         query(id) {
           return `/pokemon/${id}`;
@@ -31,4 +36,4 @@ export const apiSlice = createApi({
   },
 });
 
-export const { useFetchPokemonsQuery, useGetPokemonQuery } = apiSlice;
+export const { useFetchPokemonsQuery, useFetchPokemonsFallbackQuery, useGetPokemonQuery } = apiSlice;
