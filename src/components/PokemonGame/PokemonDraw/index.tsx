@@ -44,7 +44,11 @@ const PokemonDraw: React.FC<PokemonDrawProps> = ({
 
   return (
     <>
-      <canvas id="canvas" width="240" height="240"></canvas>
+      {selectedPokemonId ? (
+        <canvas id="canvas" width="240" height="240"></canvas>
+      ) : (
+        <canvas id="empty_canvas" width="240" height="240"></canvas>
+      )}
     </>
   );
 };

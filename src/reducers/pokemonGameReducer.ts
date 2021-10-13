@@ -31,6 +31,7 @@ const reducer = (state: PokemonGameReducerState, action: PokemonGameAction) => {
     case PokemonGameActionKind.SELECT_NEW_POKEMON:
       return {
         ...initialState,
+        currentPokemon: null,
         selectNewProkemon: true,
         canSelectNextProkemon: false,
       };
