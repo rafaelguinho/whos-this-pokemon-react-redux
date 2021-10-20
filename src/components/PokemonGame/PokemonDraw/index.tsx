@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { ImageDesigner } from "../../../models/imageDesigner";
+import { EmptyDraw } from "./styles";
 import { PokemonDrawProps } from "./types";
 
 const PokemonDraw: React.FC<PokemonDrawProps> = ({
@@ -47,7 +48,7 @@ const PokemonDraw: React.FC<PokemonDrawProps> = ({
       {selectedPokemonId ? (
         <canvas id="canvas" width="240" height="240"></canvas>
       ) : (
-        <canvas id="empty_canvas" width="240" height="240"></canvas>
+        <EmptyDraw />
       )}
     </>
   );
