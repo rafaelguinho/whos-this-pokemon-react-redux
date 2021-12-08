@@ -11,6 +11,24 @@ import GameOverScreen from "./components/GameOverScreen";
 import GameBeatScreen from "./components/GameBeatScreen";
 import GlobalStyle from "./global-styles";
 
+import { datadogRum } from "@datadog/browser-rum";
+
+try {
+  datadogRum.init({
+    applicationId: "13a95106-dbfe-4bf3-8512-5ec0b734407a",
+    clientToken: "pubdcc68c76d8a57ca0ab26c0a673bc0e92",
+    site: "datadoghq.com",
+    service: "pipe-de-vendas",
+    // Specify a version number to identify the deployed version of your application in Datadog
+    version: "1.0.0",
+    defaultPrivacyLevel: "mask-user-input",
+  });
+
+  datadogRum.startSessionReplayRecording();
+} catch (e) {
+  console.log(e);
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <GlobalStyle />
